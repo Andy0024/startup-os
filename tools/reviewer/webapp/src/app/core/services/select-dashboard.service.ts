@@ -1,8 +1,8 @@
-import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
-import { Subject } from 'rxjs';
+import {Injectable} from '@angular/core';
+import {Router} from '@angular/router';
+import {Subject} from 'rxjs';
 
-import { Diff } from '@/core/proto';
+import {Diff} from '@/core/proto';
 
 @Injectable()
 export class SelectDashboardService {
@@ -10,7 +10,7 @@ export class SelectDashboardService {
   uniqueUsers: string[] = [];
   dashboardChanges = new Subject<string>();
 
-  constructor(private router: Router) { }
+  constructor(private router: Router) {}
 
   // Creates user list
   addUniqueUsers(diff: Diff): void {
@@ -26,15 +26,13 @@ export class SelectDashboardService {
   // Opens dashboard with the email
   selectDashboard(email: string): void {
     if (this.isDashboardInit) {
-      this.router.navigate(['diffs'], { queryParams: { email: email } });
+      this.router.navigate([ 'diffs' ], {queryParams : {email : email}});
       this.selectedEmail = email;
       this.dashboardChanges.next(email);
     }
   }
 
-  isDashboardInit(): boolean {
-    return this.uniqueUsers.length > 0;
-  }
+  isDashboardInit(): boolean { return this.uniqueUsers.length > 0; }
 
   private addUniqueUser(email: string): void {
     if (email && this.uniqueUsers.indexOf(email) === -1) {
@@ -42,7 +40,5 @@ export class SelectDashboardService {
     }
   }
 
-  refresh(): void {
-    this.uniqueUsers = [];
-  }
+  refresh(): void { this.uniqueUsers = []; }
 }

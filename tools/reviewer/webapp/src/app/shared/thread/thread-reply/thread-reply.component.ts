@@ -1,16 +1,20 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { FormControl } from '@angular/forms';
-import { randstr64 } from 'rndmjs';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {FormControl} from '@angular/forms';
+import {randstr64} from 'rndmjs';
 
-import { Comment, Diff, Thread } from '@/core/proto';
-import { DiffUpdateService, NotificationService, UserService } from '@/core/services';
-import { ThreadService } from '../thread.service';
+import {Comment, Diff, Thread} from '@/core/proto';
+import {
+  DiffUpdateService,
+  NotificationService,
+  UserService
+} from '@/core/services';
+import {ThreadService} from '../thread.service';
 
 @Component({
-  selector: 'thread-reply',
-  templateUrl: './thread-reply.component.html',
-  styleUrls: ['./thread-reply.component.scss'],
-  providers: [ThreadService],
+  selector : 'thread-reply',
+  templateUrl : './thread-reply.component.html',
+  styleUrls : [ './thread-reply.component.scss' ],
+  providers : [ ThreadService ],
 })
 export class ThreadReplyComponent {
   isReply: boolean = false;
@@ -21,16 +25,12 @@ export class ThreadReplyComponent {
   @Input() thread: Thread;
   @Output() isFreezeModeEmitter = new EventEmitter<boolean>();
 
-  constructor(
-    private diffUpdateService: DiffUpdateService,
-    private userService: UserService,
-    private threadService: ThreadService,
-    private notificationService: NotificationService,
-  ) { }
+  constructor(private diffUpdateService: DiffUpdateService,
+              private userService: UserService,
+              private threadService: ThreadService,
+              private notificationService: NotificationService, ) {}
 
-  ngOnInit() {
-    this.setResolveCheckbox(this.thread.getIsDone());
-  }
+  ngOnInit() { this.setResolveCheckbox(this.thread.getIsDone()); }
 
   // Change state of resolve checkbox.
   // When need to use the method to not call changes subscription.
@@ -42,9 +42,11 @@ export class ThreadReplyComponent {
     // While user was typing new comment, thread could be changed.
     // So we don't add comment to current thread,
     // we take thread from updated diff and add new comment to it instead.
-    const updatedThread: Thread = this.threadService.getThread(this.diff, this.thread);
+    const updatedThread: Thread =
+        this.threadService.getThread(this.diff, this.thread);
     if (!updatedThread) {
-      this.notificationService.error('Sorry, but the thread is already deleted :(');
+      this.notificationService.error(
+          'Sorry, but the thread is already deleted :(');
       return;
     }
 
@@ -77,7 +79,5 @@ export class ThreadReplyComponent {
     this.isFreezeModeEmitter.emit(this.isReply);
   }
 
-  isCodeThread(): boolean {
-    return this.thread.getType() === Thread.Type.CODE;
-  }
+  isCodeThread(): boolean { return this.thread.getType() === Thread.Type.CODE; }
 }

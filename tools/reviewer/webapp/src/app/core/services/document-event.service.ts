@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
+import {Injectable} from '@angular/core';
+import {Subject} from 'rxjs';
 
 @Injectable()
 export class DocumentEventService {
@@ -12,8 +12,7 @@ export class DocumentEventService {
         this.mouseup.next();
       }
     };
-    document.onkeydown = (event: KeyboardEvent) => {
-      this.keydown.next(event);
-    };
+    document.onkeydown =
+        (event: KeyboardEvent) => { this.keydown.next(event); };
   }
 }

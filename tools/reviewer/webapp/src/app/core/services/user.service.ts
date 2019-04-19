@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 
-import { Author, Diff, File, Reviewer } from '@/core/proto';
+import {Author, Diff, File, Reviewer} from '@/core/proto';
 
 @Injectable()
 export class UserService {
@@ -22,8 +22,7 @@ export class UserService {
   // Remove reviewer with the email from reviewer list
   removeFromReviewerList(diff: Diff, email: string): void {
     const reviewerList: Reviewer[] = diff.getReviewerList().filter(
-      reviewer => reviewer.getEmail() !== email,
-    );
+        reviewer => reviewer.getEmail() !== email, );
     diff.setReviewerList(reviewerList);
   }
 
@@ -44,21 +43,16 @@ export class UserService {
 
   isFileReviewed(reviewer: Reviewer, file: File): boolean {
     for (const reviewedFile of reviewer.getReviewedList()) {
-      if (
-        reviewedFile.getFilenameWithRepo() === file.getFilenameWithRepo() &&
-        reviewedFile.getCommitId() === file.getCommitId()
-      ) {
+      if (reviewedFile.getFilenameWithRepo() === file.getFilenameWithRepo() &&
+          reviewedFile.getCommitId() === file.getCommitId()) {
         return true;
       }
     }
   }
 
   // Makes file reviewed or unreviewed depends on checkbox
-  toogleFileReview(
-    checkboxReviewed: boolean,
-    reviewer: Reviewer,
-    file: File,
-  ): void {
+  toogleFileReview(checkboxReviewed: boolean, reviewer: Reviewer,
+                   file: File, ): void {
     const isFileReviewed: boolean = this.isFileReviewed(reviewer, file);
     if (checkboxReviewed && !isFileReviewed) {
       // Add current file to reviewed files
@@ -66,10 +60,10 @@ export class UserService {
     } else if (isFileReviewed) {
       // Remove current file from reviewed files
       let reviewedFiles: File[] = reviewer.getReviewedList();
-      reviewedFiles = reviewedFiles.filter(reviewedFile => (
-        reviewedFile.getFilenameWithRepo() !== file.getFilenameWithRepo() ||
-        reviewedFile.getCommitId() !== file.getCommitId()
-      ));
+      reviewedFiles = reviewedFiles.filter(
+          reviewedFile => (reviewedFile.getFilenameWithRepo() !==
+                               file.getFilenameWithRepo() ||
+                           reviewedFile.getCommitId() !== file.getCommitId()));
       reviewer.setReviewedList(reviewedFiles);
     }
   }

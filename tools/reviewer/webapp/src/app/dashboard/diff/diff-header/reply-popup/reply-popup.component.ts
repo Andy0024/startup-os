@@ -1,5 +1,5 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { randstr64 } from 'rndmjs';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {randstr64} from 'rndmjs';
 
 import {
   Comment,
@@ -7,14 +7,14 @@ import {
   Reviewer,
   Thread,
 } from '@/core/proto';
-import { DiffUpdateService, UserService } from '@/core/services';
+import {DiffUpdateService, UserService} from '@/core/services';
 
 // The popup appears when "Reply" button is pushed.
 // How it looks: https://i.imgur.com/C8nXqyU.jpg
 @Component({
-  selector: 'reply-popup',
-  templateUrl: './reply-popup.component.html',
-  styleUrls: ['./reply-popup.component.scss'],
+  selector : 'reply-popup',
+  templateUrl : './reply-popup.component.html',
+  styleUrls : [ './reply-popup.component.scss' ],
 })
 export class ReplyPopupComponent implements OnInit {
   isLoading: boolean = false;
@@ -25,17 +25,13 @@ export class ReplyPopupComponent implements OnInit {
   @Input() diff: Diff;
   @Output() toggleReplyPopup = new EventEmitter<boolean>();
 
-  constructor(
-    public userService: UserService,
-    private diffUpdateService: DiffUpdateService,
-  ) { }
+  constructor(public userService: UserService,
+              private diffUpdateService: DiffUpdateService, ) {}
 
   ngOnInit() {
     // Set "Approved" checkbox to current approve value
-    this.reviewer = this.userService.getReviewer(
-      this.diff,
-      this.userService.email,
-    );
+    this.reviewer =
+        this.userService.getReviewer(this.diff, this.userService.email, );
     if (this.reviewer) {
       // Only if current user is present in reviewer list
       this.approved = this.reviewer.getApproved();
@@ -85,10 +81,9 @@ export class ReplyPopupComponent implements OnInit {
     }
 
     // Send the update to firebase
-    this.diffUpdateService.submitReply(this.diff).subscribe(() => this.closeReplyPopup());
+    this.diffUpdateService.submitReply(this.diff).subscribe(
+        () => this.closeReplyPopup());
   }
 
-  closeReplyPopup(): void {
-    this.toggleReplyPopup.emit(false);
-  }
+  closeReplyPopup(): void { this.toggleReplyPopup.emit(false); }
 }

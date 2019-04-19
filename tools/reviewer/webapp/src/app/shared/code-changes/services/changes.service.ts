@@ -1,19 +1,17 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 
-import { ChangeType, DiffLine, TextDiff } from '@/core/proto';
-import { BlockLine } from '../code-changes.interface';
-import { LineService } from './line.service';
+import {ChangeType, DiffLine, TextDiff} from '@/core/proto';
+import {BlockLine} from '../code-changes.interface';
+import {LineService} from './line.service';
 
 // Functions related to lines and TextDiff
 @Injectable()
 export class ChangesService {
-  constructor(private lineService: LineService) { }
+  constructor(private lineService: LineService) {}
 
-  applyTextDiffBlockLines(
-    leftBlockLines: BlockLine[],
-    rightBlockLines: BlockLine[],
-    textDiff: TextDiff,
-  ): void {
+  applyTextDiffBlockLines(leftBlockLines: BlockLine[],
+                          rightBlockLines: BlockLine[],
+                          textDiff: TextDiff, ): void {
     this.addPlaceholders(textDiff.getLeftDiffLineList(), leftBlockLines);
     this.addPlaceholders(textDiff.getRightDiffLineList(), rightBlockLines);
 
@@ -22,21 +20,20 @@ export class ChangesService {
 
     if (leftBlockLines.length !== rightBlockLines.length) {
       throw new Error(
-        `After adding all placeholders, blocks should have the same amount of lines.
+          `After adding all placeholders, blocks should have the same amount of lines.
 Left lines: ${leftBlockLines.length}
-Right lines: ${rightBlockLines.length}`,
-      );
+Right lines: ${rightBlockLines.length}`, );
     }
   }
 
   applyChanges(diffLines: DiffLine[], blockLines: BlockLine[]): void {
     diffLines.forEach(diffLine => {
       switch (diffLine.getType()) {
-        case ChangeType.DELETE:
-        case ChangeType.ADD:
-          // Highlight changes
-          blockLines[diffLine.getDiffLineNumber()].isChanged = true;
-          blockLines[diffLine.getDiffLineNumber()].diffLine = diffLine;
+      case ChangeType.DELETE:
+      case ChangeType.ADD:
+        // Highlight changes
+        blockLines[diffLine.getDiffLineNumber()].isChanged = true;
+        blockLines[diffLine.getDiffLineNumber()].diffLine = diffLine;
       }
     });
   }
@@ -45,11 +42,8 @@ Right lines: ${rightBlockLines.length}`,
     diffLines.forEach(diffLine => {
       if (diffLine.getType() === ChangeType.LINE_PLACEHOLDER) {
         // Add placeholder
-        blockLines.splice(
-          diffLine.getDiffLineNumber(),
-          0,
-          this.lineService.createPlaceholder(),
-        );
+        blockLines.splice(diffLine.getDiffLineNumber(), 0,
+                          this.lineService.createPlaceholder(), );
       }
     });
   }

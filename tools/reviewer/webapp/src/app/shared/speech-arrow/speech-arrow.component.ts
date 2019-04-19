@@ -1,12 +1,12 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
 
 const svgNS: string = 'http://www.w3.org/2000/svg';
 
 // An arrow of speech bubble
 // How it looks: https://i.imgur.com/bQDdg4B.png
 @Component({
-  selector: 'speech-arrow',
-  templateUrl: './speech-arrow.component.html',
+  selector : 'speech-arrow',
+  templateUrl : './speech-arrow.component.html',
 })
 export class SpeechArrowComponent implements OnInit {
   width: number;
@@ -38,11 +38,12 @@ export class SpeechArrowComponent implements OnInit {
   createPath(): Element {
     const path: Element = document.createElementNS(svgNS, 'path');
     const coords: number[][] = [
-      [this.border, this.size + 1],
-      [this.size / 2 + this.border, this.border],
-      [this.size + this.border, this.size + 1],
+      [ this.border, this.size + 1 ],
+      [ this.size / 2 + this.border, this.border ],
+      [ this.size + this.border, this.size + 1 ],
     ];
-    const d: string = 'M' + coords.map(coord => coord.join(',')).join(' L') + 'Z';
+    const d: string =
+        'M' + coords.map(coord => coord.join(',')).join(' L') + 'Z';
     path.setAttributeNS(null, 'd', d);
     path.setAttributeNS(null, 'fill', this.color);
     path.setAttributeNS(null, 'filter', 'url(#shadow)');
@@ -54,13 +55,14 @@ export class SpeechArrowComponent implements OnInit {
   createPolyline(): Element {
     const polyline: Element = document.createElementNS(svgNS, 'polyline');
     const polylinecoords: number[][] = [
-      [0, this.size - this.border / 2],
-      [this.border, this.size - this.border / 2],
-      [this.size / 2 + this.border, this.border],
-      [this.size + this.border, this.size - this.border / 2],
-      [this.width, this.size - this.border / 2],
+      [ 0, this.size - this.border / 2 ],
+      [ this.border, this.size - this.border / 2 ],
+      [ this.size / 2 + this.border, this.border ],
+      [ this.size + this.border, this.size - this.border / 2 ],
+      [ this.width, this.size - this.border / 2 ],
     ];
-    const points: string = polylinecoords.map(coord => coord.join(',')).join(' ');
+    const points: string =
+        polylinecoords.map(coord => coord.join(',')).join(' ');
     polyline.setAttributeNS(null, 'points', points);
     polyline.setAttributeNS(null, 'fill', 'none');
     polyline.setAttributeNS(null, 'stroke', this.bordercolor);
@@ -96,10 +98,12 @@ export class SpeechArrowComponent implements OnInit {
     feOffset.setAttributeNS(null, 'dx', this.shadow[0].toString());
     feOffset.setAttributeNS(null, 'dy', this.shadow[1].toString());
 
-    const feGaussianBlur: Element = document.createElementNS(svgNS, 'feGaussianBlur');
+    const feGaussianBlur: Element =
+        document.createElementNS(svgNS, 'feGaussianBlur');
     feGaussianBlur.setAttributeNS(null, 'result', 'blurOut');
     feGaussianBlur.setAttributeNS(null, 'in', 'matrixOut');
-    feGaussianBlur.setAttributeNS(null, 'stdDeviation', this.shadow[2].toString());
+    feGaussianBlur.setAttributeNS(null, 'stdDeviation',
+                                  this.shadow[2].toString());
 
     const feBlend: Element = document.createElementNS(svgNS, 'feBlend');
     feBlend.setAttributeNS(null, 'in', 'SourceGraphic');
@@ -107,16 +111,16 @@ export class SpeechArrowComponent implements OnInit {
     feBlend.setAttributeNS(null, 'mode', 'normal');
 
     const value: number = 1 - this.shadow[3];
-    const feColorMatrix: Element = document.createElementNS(svgNS, 'feColorMatrix');
+    const feColorMatrix: Element =
+        document.createElementNS(svgNS, 'feColorMatrix');
     feColorMatrix.setAttributeNS(null, 'result', 'matrixOut');
     feColorMatrix.setAttributeNS(null, 'in', 'offOut');
     feColorMatrix.setAttributeNS(null, 'type', 'matrix');
     feColorMatrix.setAttributeNS(null, 'values',
-      `${value} 0        0        0        0
+                                 `${value} 0        0        0        0
        0        ${value} 0        0        0
        0        0        ${value} 0        0
-       0        0        0        1        0`,
-    );
+       0        0        0        1        0`, );
 
     filter.appendChild(feOffset);
     filter.appendChild(feColorMatrix);

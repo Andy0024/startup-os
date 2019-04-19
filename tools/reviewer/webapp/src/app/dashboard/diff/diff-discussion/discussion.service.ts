@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 
-import { Thread } from '@/core/proto';
+import {Thread} from '@/core/proto';
 
 // Methods, which can be reused in code and diff thread components
 @Injectable()
@@ -22,7 +22,8 @@ export class DiscussionService {
 
   getConversationLabel(length: number): string {
     // Example: 6 conversations
-    const conversations: string = (length > 1) ? 'conversations' : 'conversation';
+    const conversations: string =
+        (length > 1) ? 'conversations' : 'conversation';
     return length + ' ' + conversations;
   }
 
@@ -30,12 +31,10 @@ export class DiscussionService {
   getHeader(threads: Thread[]): string {
     // Example: (6 conversations, 3 unresolved)
     return `(${this.getConversationLabel(threads.length)}, ` +
-      `${this.getUnresolvedThreads(threads)} unresolved)`;
+           `${this.getUnresolvedThreads(threads)} unresolved)`;
   }
 
   private getUnresolvedThreads(threads: Thread[]): number {
-    return threads
-      .filter(thread => !thread.getIsDone())
-      .length;
+    return threads.filter(thread => !thread.getIsDone()).length;
   }
 }

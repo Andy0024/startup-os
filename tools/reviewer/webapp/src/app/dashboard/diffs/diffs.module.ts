@@ -1,21 +1,20 @@
-import { NgModule } from '@angular/core';
+import {NgModule} from '@angular/core';
 
-import { SharedModule } from '@/shared';
+import {SharedModule} from '@/shared';
 
-import { DiffsRoutingModule } from './diffs-routing.module';
-import { DiffsComponent } from './diffs.component';
+import {DiffsRoutingModule} from './diffs-routing.module';
+import {DiffsComponent} from './diffs.component';
 
 @NgModule({
-  imports: [
+  imports : [
     SharedModule,
     DiffsRoutingModule,
   ],
-  declarations: [
+  declarations : [
     DiffsComponent,
   ],
-  providers: [],
+  providers : [],
 })
-export class DiffsModule { }
-export function DiffsModuleFactory() {
-  return DiffsModule;
+export class DiffsModule {
 }
+export function DiffsModuleFactory() { return DiffsModule; }

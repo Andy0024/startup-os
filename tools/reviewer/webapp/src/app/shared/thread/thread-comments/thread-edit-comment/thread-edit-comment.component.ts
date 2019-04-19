@@ -1,15 +1,15 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {FormControl} from '@angular/forms';
 
-import { Comment, Diff, Thread } from '@/core/proto';
-import { DiffUpdateService, NotificationService } from '@/core/services';
-import { ThreadService } from '../../thread.service';
+import {Comment, Diff, Thread} from '@/core/proto';
+import {DiffUpdateService, NotificationService} from '@/core/services';
+import {ThreadService} from '../../thread.service';
 
 @Component({
-  selector: 'thread-edit-comment',
-  templateUrl: './thread-edit-comment.component.html',
-  styleUrls: ['./thread-edit-comment.component.scss'],
-  providers: [ThreadService],
+  selector : 'thread-edit-comment',
+  templateUrl : './thread-edit-comment.component.html',
+  styleUrls : [ './thread-edit-comment.component.scss' ],
+  providers : [ ThreadService ],
 })
 export class ThreadEditCommentComponent implements OnInit {
   textarea = new FormControl();
@@ -20,19 +20,13 @@ export class ThreadEditCommentComponent implements OnInit {
   @Input() commentIndex: number;
   @Output() closeEmitter = new EventEmitter<void>();
 
-  constructor(
-    private diffUpdateService: DiffUpdateService,
-    private notificationService: NotificationService,
-    private threadService: ThreadService,
-  ) { }
+  constructor(private diffUpdateService: DiffUpdateService,
+              private notificationService: NotificationService,
+              private threadService: ThreadService, ) {}
 
-  ngOnInit() {
-    this.textarea.setValue(this.comment.getContent());
-  }
+  ngOnInit() { this.textarea.setValue(this.comment.getContent()); }
 
-  close(): void {
-    this.closeEmitter.emit();
-  }
+  close(): void { this.closeEmitter.emit(); }
 
   // Saves comment in firebase
   save(): void {
@@ -46,11 +40,14 @@ export class ThreadEditCommentComponent implements OnInit {
   }
 
   // While user was editing a comment, diff could be changed.
-  // So we don't change current comment, we take comment from updated diff and change it instead.
+  // So we don't change current comment, we take comment from updated diff and
+  // change it instead.
   getComment(id: string): Comment {
-    const updatedThread: Thread = this.threadService.getThread(this.diff, this.thread);
+    const updatedThread: Thread =
+        this.threadService.getThread(this.diff, this.thread);
     if (!updatedThread) {
-      this.notificationService.error('Sorry, but the thread is already deleted :(');
+      this.notificationService.error(
+          'Sorry, but the thread is already deleted :(');
       return;
     }
 
@@ -60,6 +57,7 @@ export class ThreadEditCommentComponent implements OnInit {
       }
     }
 
-    this.notificationService.error('Sorry, but the comment is already deleted :(');
+    this.notificationService.error(
+        'Sorry, but the comment is already deleted :(');
   }
 }

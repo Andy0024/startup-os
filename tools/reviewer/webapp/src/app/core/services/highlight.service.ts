@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import * as hljs from 'highlight.js';
 
 @Injectable()
@@ -12,15 +12,24 @@ export class HighlightService {
     const findSpecialChars: RegExp = /[&<>"'`=\/]/g;
     return code.replace(findSpecialChars, char => {
       switch (char) {
-        case '&': return '&amp;';
-        case '<': return '&lt;';
-        case '>': return '&gt;';
-        case '"': return '&quot;';
-        case "'": return '&#39;';
-        case '/': return '&#x2F;';
-        case '`': return '&#x60;';
-        case '=': return '&#x3D;';
-        default: return char;
+      case '&':
+        return '&amp;';
+      case '<':
+        return '&lt;';
+      case '>':
+        return '&gt;';
+      case '"':
+        return '&quot;';
+      case "'":
+        return '&#39;';
+      case '/':
+        return '&#x2F;';
+      case '`':
+        return '&#x60;';
+      case '=':
+        return '&#x3D;';
+      default:
+        return char;
       }
     });
   }

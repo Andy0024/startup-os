@@ -1,8 +1,8 @@
-import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
+import {Injectable} from '@angular/core';
+import {Subject} from 'rxjs';
 
-import { Thread } from '@/core/proto';
-import { CommentExpandedMap } from '@/shared/thread';
+import {Thread} from '@/core/proto';
+import {CommentExpandedMap} from '@/shared/thread';
 
 interface ThreadExpandedMap {
   [id: string]: CommentExpandedMap;
@@ -12,7 +12,8 @@ interface FreezeMap {
   [id: string]: boolean;
 }
 
-// Service keeps state of threads: which comment expanded and which thread is frozen.
+// Service keeps state of threads: which comment expanded and which thread is
+// frozen.
 // To read what is freeze mode, please open thread component.
 @Injectable()
 export class ThreadStateService {
@@ -32,7 +33,8 @@ export class ThreadStateService {
   // Makes all comments expanded/collapsed
   toggle(isExpanded: boolean): void {
     for (const threadId in this.threadExpandedMap) {
-      const commentExpandedMap: CommentExpandedMap = this.threadExpandedMap[threadId];
+      const commentExpandedMap: CommentExpandedMap =
+          this.threadExpandedMap[threadId];
       for (const commentId in commentExpandedMap) {
         commentExpandedMap[commentId] = isExpanded;
       }
@@ -40,13 +42,15 @@ export class ThreadStateService {
     }
   }
 
-  // Saves link to comments to be able to expand/collapse them by clicking on the button
+  // Saves link to comments to be able to expand/collapse them by clicking on
+  // the button
   createLink(thread: Thread): void {
     if (!this.threadExpandedMap[thread.getId()]) {
       this.threadExpandedMap[thread.getId()] = {};
     }
     for (const comment of thread.getCommentList()) {
-      if (this.threadExpandedMap[thread.getId()][comment.getId()] === undefined) {
+      if (this.threadExpandedMap[thread.getId()][comment.getId()] ===
+          undefined) {
         this.threadExpandedMap[thread.getId()][comment.getId()] = false;
       }
     }

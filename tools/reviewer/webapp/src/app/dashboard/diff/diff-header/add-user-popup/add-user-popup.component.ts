@@ -1,12 +1,12 @@
-import { Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
-import { Subscription } from 'rxjs';
+import {Component, EventEmitter, Input, OnDestroy, Output} from '@angular/core';
+import {Subscription} from 'rxjs';
 
-import { DocumentEventService } from '@/core/services';
+import {DocumentEventService} from '@/core/services';
 
 @Component({
-  selector: 'add-user-popup',
-  templateUrl: './add-user-popup.component.html',
-  styleUrls: ['./add-user-popup.component.scss'],
+  selector : 'add-user-popup',
+  templateUrl : './add-user-popup.component.html',
+  styleUrls : [ './add-user-popup.component.scss' ],
 })
 export class AddUserPopupComponent implements OnDestroy {
   isEmailInvalid: boolean;
@@ -51,9 +51,7 @@ export class AddUserPopupComponent implements OnDestroy {
     return emailValidation.test(email);
   }
 
-  hideError(): void {
-    this.isEmailInvalid = false;
-  }
+  hideError(): void { this.isEmailInvalid = false; }
 
   reset(): void {
     this.email = '';
@@ -62,23 +60,22 @@ export class AddUserPopupComponent implements OnDestroy {
   }
 
   private subscribeOnKeydown(): void {
-    this.keySubscription = this.documentEventService.keydown.subscribe(event => {
-      // Hide error when user is typing something
-      this.hideError();
+    this.keySubscription =
+        this.documentEventService.keydown.subscribe(event => {
+          // Hide error when user is typing something
+          this.hideError();
 
-      // If Enter is pressed then add user
-      if (event.key === 'Enter') {
-        this.add();
-      }
+          // If Enter is pressed then add user
+          if (event.key === 'Enter') {
+            this.add();
+          }
 
-      // If Esc is pressed then close popup
-      if (event.key === 'Escape') {
-        this.close();
-      }
-    });
+          // If Esc is pressed then close popup
+          if (event.key === 'Escape') {
+            this.close();
+          }
+        });
   }
 
-  ngOnDestroy() {
-    this.keySubscription.unsubscribe();
-  }
+  ngOnDestroy() { this.keySubscription.unsubscribe(); }
 }

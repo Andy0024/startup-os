@@ -1,14 +1,14 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {
   AngularFirestore,
   AngularFirestoreCollection,
 } from '@angular/fire/firestore';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import {Observable} from 'rxjs';
+import {map} from 'rxjs/operators';
 
-import { Diff } from '@/core/proto';
-import { EncodingService } from './encoding.service';
-import { UserService } from './user.service';
+import {Diff} from '@/core/proto';
+import {EncodingService} from './encoding.service';
+import {UserService} from './user.service';
 
 interface FirebaseElement {
   proto: string;
@@ -18,30 +18,25 @@ interface FirebaseElement {
 export class FirebaseService {
   private diffs: AngularFirestoreCollection<FirebaseElement>;
 
-  constructor(
-    private db: AngularFirestore,
-    private encodingService: EncodingService,
-    private userService: UserService,
-  ) {
+  constructor(private db: AngularFirestore,
+              private encodingService: EncodingService,
+              private userService: UserService, ) {
     this.diffs = this.db.collection('reviewer/data/diff');
   }
 
   getDiffs(): Observable<Diff[]> {
-    return this.diffs
-      .snapshotChanges().pipe(
+    return this.diffs.snapshotChanges().pipe(
         map(actions => {
           return actions.map(action => {
-            const firebaseElement = action.payload.doc.data() as FirebaseElement;
+            const firebaseElement =
+                action.payload.doc.data() as FirebaseElement;
             return this.convertFirebaseElementToDiff(firebaseElement);
           });
-        }),
-      );
+        }), );
   }
 
   getDiff(id: string): Observable<Diff> {
-    return this.diffs
-      .doc(id)
-      .snapshotChanges().pipe(
+    return this.diffs.doc(id).snapshotChanges().pipe(
         map(action => {
           const firebaseElement = action.payload.data() as FirebaseElement;
           if (firebaseElement === undefined) {
@@ -49,8 +44,7 @@ export class FirebaseService {
             return;
           }
           return this.convertFirebaseElementToDiff(firebaseElement);
-        }),
-      );
+        }), );
   }
 
   updateDiff(diff: Diff): Observable<void> {
@@ -60,21 +54,19 @@ export class FirebaseService {
     diff.setModifiedBy(this.userService.email);
 
     return new Observable(observer => {
-      this.diffs
-        .doc(diff.getId().toString())
-        .update(this.convertDiffToFirebaseElement(diff))
-        .then(() => observer.next())
-        .catch(() => observer.error());
+      this.diffs.doc(diff.getId().toString())
+          .update(this.convertDiffToFirebaseElement(diff))
+          .then(() => observer.next())
+          .catch(() => observer.error());
     });
   }
 
   removeDiff(id: string): Observable<void> {
     return new Observable(observer => {
-      this.diffs
-        .doc(id)
-        .delete()
-        .then(() => observer.next())
-        .catch(() => observer.error());
+      this.diffs.doc(id)
+          .delete()
+          .then(() => observer.next())
+          .catch(() => observer.error());
     });
   }
 
@@ -83,7 +75,7 @@ export class FirebaseService {
     const binary: Uint8Array = diff.serializeBinary();
     // Convert binary to firebaseElement
     const firebaseElement: FirebaseElement = {
-      proto: this.encodingService.encodeUint8ArrayToBase64String(binary),
+      proto : this.encodingService.encodeUint8ArrayToBase64String(binary),
     };
 
     return firebaseElement;
@@ -91,8 +83,9 @@ export class FirebaseService {
 
   private convertFirebaseElementToDiff(firebaseElement: FirebaseElement): Diff {
     // Convert firebaseElement to binary
-    const binary: Uint8Array = this.encodingService
-      .decodeBase64StringToUint8Array(firebaseElement.proto);
+    const binary: Uint8Array =
+        this.encodingService.decodeBase64StringToUint8Array(
+            firebaseElement.proto);
     // Convert binary to diff
     const diff: Diff = Diff.deserializeBinary(binary);
 

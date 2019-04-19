@@ -1,8 +1,8 @@
-import { Location } from '@angular/common';
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormControl } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import {Location} from '@angular/common';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {FormControl} from '@angular/forms';
+import {ActivatedRoute, Router} from '@angular/router';
+import {Subscription} from 'rxjs';
 
 import {
   BranchInfo,
@@ -25,11 +25,12 @@ const headerTopStart: number = 98;
 // The component implements file-changes page.
 // Frame for code-changes.
 @Component({
-  selector: 'file-changes',
-  templateUrl: './file-changes.component.html',
-  styleUrls: ['./file-changes.component.scss'],
+  selector : 'file-changes',
+  templateUrl : './file-changes.component.html',
+  styleUrls : [ './file-changes.component.scss' ],
 })
-export class FileChangesComponent implements OnInit, OnDestroy {
+export class FileChangesComponent implements OnInit,
+    OnDestroy {
   isHeaderFixed: boolean = false;
   isLoading: boolean;
   diff: Diff;
@@ -46,40 +47,39 @@ export class FileChangesComponent implements OnInit, OnDestroy {
   onloadSubscription = new Subscription();
   changesSubscription = new Subscription();
 
-  constructor(
-    private firebaseStateService: FirebaseStateService,
-    private exceptionService: ExceptionService,
-    private activatedRoute: ActivatedRoute,
-    private router: Router,
-    private location: Location,
-    private textDiffService: TextDiffService,
-    private userService: UserService,
-    private diffUpdateService: DiffUpdateService,
-  ) {
+  constructor(private firebaseStateService: FirebaseStateService,
+              private exceptionService: ExceptionService,
+              private activatedRoute: ActivatedRoute, private router: Router,
+              private location: Location,
+              private textDiffService: TextDiffService,
+              private userService: UserService,
+              private diffUpdateService: DiffUpdateService, ) {
     this.isLoading = true;
     document.body.style.width = 'auto';
     document.body.style.minWidth = '100%';
 
     document.onscroll = () => {
-      const scrollTop: number = document.documentElement.scrollTop || document.body.scrollTop;
+      const scrollTop: number =
+          document.documentElement.scrollTop || document.body.scrollTop;
       this.isHeaderFixed = scrollTop >= headerTopStart;
     };
 
     // When "review file" checkbox is clicked
     this.fileReviewedCheckbox.valueChanges.subscribe(checkboxReviewed => {
-      this.userService.toogleFileReview(checkboxReviewed, this.reviewer, this.rightFile);
+      this.userService.toogleFileReview(checkboxReviewed, this.reviewer,
+                                        this.rightFile);
       this.diffUpdateService.reviewFile(this.diff, checkboxReviewed);
     });
   }
 
-  ngOnInit() {
-    this.parseUrlParam();
-  }
+  ngOnInit() { this.parseUrlParam(); }
 
   // Gets parameters from url
   private parseUrlParam(): void {
-    // '/diff/33/path/to/file.java?left=abc' -> [url, '33', 'path/to/file.java', param]
-    const url: RegExpMatchArray = this.router.url.match(/\/diff\/([\d]+)\/([\w\d\.\/-]+)(\?.+?)?/);
+    // '/diff/33/path/to/file.java?left=abc' -> [url, '33', 'path/to/file.java',
+    // param]
+    const url: RegExpMatchArray =
+        this.router.url.match(/\/diff\/([\d]+)\/([\w\d\.\/-]+)(\?.+?)?/);
     this.diffId = url[1];
     const filename: string = url[2];
 
@@ -96,21 +96,17 @@ export class FileChangesComponent implements OnInit, OnDestroy {
 
   // Loads diff from firebase
   private loadDiff(diffId: string): void {
-    this.onloadSubscription = this.firebaseStateService
-      .getDiff(diffId)
-      .subscribe(diff => {
-        this.setDiff(diff);
-        this.subscribeOnChanges();
-      });
+    this.onloadSubscription =
+        this.firebaseStateService.getDiff(diffId).subscribe(diff => {
+          this.setDiff(diff);
+          this.subscribeOnChanges();
+        });
   }
 
   // Each time when diff is changed in firebase, we receive new diff here.
   private subscribeOnChanges(): void {
-    this.changesSubscription = this.firebaseStateService
-      .diffChanges
-      .subscribe(diff => {
-        this.setDiff(diff);
-      });
+    this.changesSubscription = this.firebaseStateService.diffChanges.subscribe(
+        diff => { this.setDiff(diff); });
   }
 
   // When diff is received from firebase
@@ -123,30 +119,31 @@ export class FileChangesComponent implements OnInit, OnDestroy {
     this.reviewer = this.userService.getReviewer(diff, this.userService.email);
 
     // Load changes from local server
-    this.textDiffService.load(
-      this.diff,
-      this.filenameWithRepo,
-      this.leftFile.getCommitId(),
-      this.rightFile.getCommitId(),
-    ).subscribe(textDiffBundle => {
-      this.branchInfo = textDiffBundle.branchInfo;
-      this.leftFile = textDiffBundle.leftFile;
-      this.rightFile = textDiffBundle.rightFile;
-      this.filesSortedByCommits = textDiffBundle.filesSortedByCommits;
-      this.textDiff = textDiffBundle.textDiff;
-      this.localThreads = textDiffBundle.localThreads;
-      this.setReviewedCheckbox(this.diff, this.rightFile);
+    this.textDiffService
+        .load(this.diff, this.filenameWithRepo, this.leftFile.getCommitId(),
+              this.rightFile.getCommitId(), )
+        .subscribe(
+            textDiffBundle => {
+              this.branchInfo = textDiffBundle.branchInfo;
+              this.leftFile = textDiffBundle.leftFile;
+              this.rightFile = textDiffBundle.rightFile;
+              this.filesSortedByCommits = textDiffBundle.filesSortedByCommits;
+              this.textDiff = textDiffBundle.textDiff;
+              this.localThreads = textDiffBundle.localThreads;
+              this.setReviewedCheckbox(this.diff, this.rightFile);
 
-      this.isLoading = false;
-    }, (error: Error) => {
-      this.exceptionService.fileNotFound(this.diff.getId());
-    });
+              this.isLoading = false;
+            },
+            (error: Error) => {
+              this.exceptionService.fileNotFound(this.diff.getId());
+            });
   }
 
   private setReviewedCheckbox(diff: Diff, file: File): void {
     if (this.reviewer) {
-      const isFileReviewed: boolean = this.userService.isFileReviewed(this.reviewer, file);
-      this.fileReviewedCheckbox.setValue(isFileReviewed, { emitEvent: false });
+      const isFileReviewed: boolean =
+          this.userService.isFileReviewed(this.reviewer, file);
+      this.fileReviewedCheckbox.setValue(isFileReviewed, {emitEvent : false});
     }
   }
 
@@ -171,13 +168,12 @@ export class FileChangesComponent implements OnInit, OnDestroy {
 
     // Convert local variables to url with query params
     const paramList: string[][] = [
-      ['left', this.leftFile.getCommitId()],
-      ['right', this.rightFile.getCommitId()],
+      [ 'left', this.leftFile.getCommitId() ],
+      [ 'right', this.rightFile.getCommitId() ],
     ];
-    const queryParams: string = paramList
-      .filter(commit => commit[1])
-      .map(commit => commit.join('='))
-      .join('&');
+    const queryParams: string = paramList.filter(commit => commit[1])
+                                    .map(commit => commit.join('='))
+                                    .join('&');
     const currentState: string = [
       'diff',
       this.diffId,

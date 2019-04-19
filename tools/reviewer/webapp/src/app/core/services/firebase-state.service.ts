@@ -1,8 +1,8 @@
-import { Injectable } from '@angular/core';
-import { Observable, of, Subject, Subscription } from 'rxjs';
+import {Injectable} from '@angular/core';
+import {Observable, of, Subject, Subscription} from 'rxjs';
 
-import { Diff } from '@/core/proto';
-import { FirebaseService } from './firebase.service';
+import {Diff} from '@/core/proto';
+import {FirebaseService} from './firebase.service';
 
 @Injectable()
 export class FirebaseStateService {
@@ -15,7 +15,7 @@ export class FirebaseStateService {
   private diffSubscription = new Subscription();
   private diffsSubscription = new Subscription();
 
-  constructor(private firebaseService: FirebaseService) { }
+  constructor(private firebaseService: FirebaseService) {}
 
   getDiff(id: string): Observable<Diff> {
     this.connectDiff(id);
@@ -42,10 +42,11 @@ export class FirebaseStateService {
       // Diffs aren't loaded yet.
       // Wait until loaded then return.
       return new Observable(observer => {
-        const subscription: Subscription = this.diffsChanges.subscribe(diffs => {
-          subscription.unsubscribe();
-          observer.next(diffs);
-        });
+        const subscription: Subscription =
+            this.diffsChanges.subscribe(diffs => {
+              subscription.unsubscribe();
+              observer.next(diffs);
+            });
       });
     }
   }
@@ -54,11 +55,12 @@ export class FirebaseStateService {
     if (!this.diff || id !== this.diff.getId().toString()) {
       this.isDiffLoading = true;
       this.diffSubscription.unsubscribe();
-      this.diffSubscription = this.firebaseService.getDiff(id).subscribe(diff => {
-        this.diff = diff;
-        this.isDiffLoading = false;
-        this.diffChanges.next(diff);
-      });
+      this.diffSubscription =
+          this.firebaseService.getDiff(id).subscribe(diff => {
+            this.diff = diff;
+            this.isDiffLoading = false;
+            this.diffChanges.next(diff);
+          });
     }
   }
 
@@ -66,11 +68,12 @@ export class FirebaseStateService {
     if (this.diffs.length === 0) {
       this.isDiffsLoading = true;
       this.diffsSubscription.unsubscribe();
-      this.diffsSubscription = this.firebaseService.getDiffs().subscribe(diffs => {
-        this.diffs = diffs;
-        this.isDiffsLoading = false;
-        this.diffsChanges.next(diffs);
-      });
+      this.diffsSubscription =
+          this.firebaseService.getDiffs().subscribe(diffs => {
+            this.diffs = diffs;
+            this.isDiffsLoading = false;
+            this.diffsChanges.next(diffs);
+          });
     }
   }
 

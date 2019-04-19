@@ -8,14 +8,12 @@ import {
 
 // Sets the element's HTML
 @Directive({
-  selector: '[HTML]',
+  selector : '[HTML]',
 })
 export class HtmlDirective implements OnChanges {
   @Input() HTML: string;
 
-  constructor(
-    private elementRef: ElementRef,
-  ) { }
+  constructor(private elementRef: ElementRef, ) {}
 
   ngOnChanges(changes: SimpleChanges): void {
     if ('HTML' in changes) {

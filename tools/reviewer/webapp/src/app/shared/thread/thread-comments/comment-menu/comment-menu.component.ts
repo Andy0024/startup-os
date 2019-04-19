@@ -1,10 +1,10 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 
 // Button interface to delete/edit a comment
 @Component({
-  selector: 'comment-menu',
-  templateUrl: './comment-menu.component.html',
-  styleUrls: ['./comment-menu.component.scss'],
+  selector : 'comment-menu',
+  templateUrl : './comment-menu.component.html',
+  styleUrls : [ './comment-menu.component.scss' ],
 })
 export class CommentMenuComponent {
   @Input() isMenuVisible: boolean = false;
@@ -22,7 +22,7 @@ export class CommentMenuComponent {
     this.toggle();
   }
 
-  delete(): void {
+  delete (): void {
     this.toggle();
     this.deleteEmitter.emit();
   }

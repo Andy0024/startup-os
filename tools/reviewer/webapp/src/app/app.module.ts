@@ -1,24 +1,24 @@
-import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {NgModule} from '@angular/core';
+import {BrowserModule} from '@angular/platform-browser';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
-import { CoreModule } from './core';
-import { FirebaseModule } from './import';
-import { LogComponent } from './log';
-import { LoginComponent } from './login';
-import { PageNotFoundComponent } from './page-not-found';
-import { SharedModule } from './shared';
+import {AppRoutingModule} from './app-routing.module';
+import {AppComponent} from './app.component';
+import {CoreModule} from './core';
+import {FirebaseModule} from './import';
+import {LogComponent} from './log';
+import {LoginComponent} from './login';
+import {PageNotFoundComponent} from './page-not-found';
+import {SharedModule} from './shared';
 
 @NgModule({
-  declarations: [
+  declarations : [
     AppComponent,
     PageNotFoundComponent,
     LoginComponent,
     LogComponent,
   ],
-  imports: [
+  imports : [
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
@@ -26,7 +26,8 @@ import { SharedModule } from './shared';
     SharedModule,
     FirebaseModule,
   ],
-  providers: [],
-  bootstrap: [AppComponent],
+  providers : [],
+  bootstrap : [ AppComponent ],
 })
-export class AppModule { }
+export class AppModule {
+}

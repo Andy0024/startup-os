@@ -12,9 +12,9 @@ import {
 // Also displays email of the user.
 // How it looks: https://i.imgur.com/3zf9Dpu.jpg
 @Component({
-  selector: 'user-popup',
-  templateUrl: './user-popup.component.html',
-  styleUrls: ['./user-popup.component.scss'],
+  selector : 'user-popup',
+  templateUrl : './user-popup.component.html',
+  styleUrls : [ './user-popup.component.scss' ],
 })
 export class UserPopupComponent {
   isHovered: boolean = false;
@@ -36,9 +36,7 @@ export class UserPopupComponent {
     this.close();
   }
 
-  close(): void {
-    this.isHovered = false;
-  }
+  close(): void { this.isHovered = false; }
 
   changeAttention(): void {
     this.changeAttentionEmitter.emit(this.email);

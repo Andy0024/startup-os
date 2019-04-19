@@ -1,3 +1,1 @@
-export interface CommentExpandedMap {
-  [id: string]: boolean;
-}
+export interface CommentExpandedMap { [id: string]: boolean; }
