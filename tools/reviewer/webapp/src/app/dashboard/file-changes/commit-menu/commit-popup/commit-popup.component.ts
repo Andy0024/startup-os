@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import {Component, Input} from '@angular/core';
 
 export interface CommitInfo {
   id: string;
@@ -16,7 +16,5 @@ export interface CommitInfo {
 export class CommitPopupComponent {
   @Input() commitInfo: CommitInfo;
 
-  getId(id: string): string {
-    return id || 'Uncommited';
-  }
+  getId(id: string): string { return id || 'Uncommited'; }
 }

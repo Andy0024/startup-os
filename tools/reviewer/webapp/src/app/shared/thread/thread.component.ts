@@ -1,7 +1,7 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 
-import { Diff, Thread } from '@/core/proto';
-import { CommentExpandedMap } from './thread-comments';
+import {Diff, Thread} from '@/core/proto';
+import {CommentExpandedMap} from './thread-comments';
 
 // The component implements a single thread.
 // How it looks: https://i.imgur.com/WGPp361.jpg
@@ -11,10 +11,13 @@ import { CommentExpandedMap } from './thread-comments';
   styleUrls: ['./thread.component.scss'],
 })
 export class ThreadComponent {
-  // Freeze - it's a system which blocks updating of threads, when user is editing one.
-  // We need it, because when two (or more) persons are editing threads, they interfere
+  // Freeze - it's a system which blocks updating of threads, when user is
+  // editing one.
+  // We need it, because when two (or more) persons are editing threads, they
+  // interfere
   // each other.
-  // When one thread is frozen, all threads isn't updating (only for user, which is editing).
+  // When one thread is frozen, all threads isn't updating (only for user, which
+  // is editing).
   isCommentFreeze: boolean = false;
   isReplyFreeze: boolean = false;
 

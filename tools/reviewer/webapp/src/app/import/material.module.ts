@@ -1,5 +1,5 @@
-import { CommonModule } from '@angular/common';
-import { NgModule } from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {NgModule} from '@angular/core';
 import {
   MatButtonModule,
   MatCardModule,
@@ -41,4 +41,5 @@ const MaterialImports = [
   providers: [],
   exports: MaterialImports,
 })
-export class MaterialModule { }
+export class MaterialModule {
+}

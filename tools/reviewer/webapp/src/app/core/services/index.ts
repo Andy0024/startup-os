@@ -15,21 +15,21 @@ export * from './text-diff.service';
 export * from './select-dashboard.service';
 
 // Services
-import { AuthGuard } from './auth.guard';
-import { AuthService } from './auth.service';
-import { CiService } from './ci.service';
-import { DiffUpdateService } from './diff-update.service';
-import { DocumentEventService } from './document-event.service';
-import { EncodingService } from './encoding.service';
-import { ExceptionService } from './exception.service';
-import { FirebaseStateService } from './firebase-state.service';
-import { FirebaseService } from './firebase.service';
-import { HighlightService } from './highlight.service';
-import { LocalserverService } from './localserver.service';
-import { NotificationService } from './notification.service';
-import { SelectDashboardService } from './select-dashboard.service';
-import { TextDiffService } from './text-diff.service';
-import { UserService } from './user.service';
+import {AuthGuard} from './auth.guard';
+import {AuthService} from './auth.service';
+import {CiService} from './ci.service';
+import {DiffUpdateService} from './diff-update.service';
+import {DocumentEventService} from './document-event.service';
+import {EncodingService} from './encoding.service';
+import {ExceptionService} from './exception.service';
+import {FirebaseStateService} from './firebase-state.service';
+import {FirebaseService} from './firebase.service';
+import {HighlightService} from './highlight.service';
+import {LocalserverService} from './localserver.service';
+import {NotificationService} from './notification.service';
+import {SelectDashboardService} from './select-dashboard.service';
+import {TextDiffService} from './text-diff.service';
+import {UserService} from './user.service';
 export const ServiceList = [
   AuthGuard,
   AuthService,

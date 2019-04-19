@@ -1,7 +1,7 @@
-import { Injectable } from '@angular/core';
-import { randstr64 } from 'rndmjs';
+import {Injectable} from '@angular/core';
+import {randstr64} from 'rndmjs';
 
-import { BranchInfo, Comment, File, Thread } from '@/core/proto';
+import {BranchInfo, Comment, File, Thread} from '@/core/proto';
 import {
   BlockIndex,
   BlockLine,
@@ -13,7 +13,8 @@ import {
 @Injectable()
 export class CommentsService {
   // Add a thread to the line
-  addThread(changesLine: ChangesLine, blockIndex: BlockIndex, thread: Thread): void {
+  addThread(changesLine: ChangesLine, blockIndex: BlockIndex, thread: Thread):
+      void {
     changesLine.commentsLine.blocks[blockIndex].threads.push(thread);
   }
 
@@ -27,15 +28,12 @@ export class CommentsService {
 
   // Remove all threads with comments from the line
   closeThreads(
-    changesLine: ChangesLine,
-    blockIndex: BlockIndex,
-    openThreadsMap: Dictionary[],
-  ): void {
+      changesLine: ChangesLine, blockIndex: BlockIndex,
+      openThreadsMap: Dictionary[], ): void {
     const blockLine: BlockLine = changesLine.blocks[blockIndex];
     const threads: Thread[] = blockLine.threads;
-    blockLine.threads = threads.filter(thread => {
-      return thread.getCommentList().length === 0;
-    });
+    blockLine.threads = threads.filter(
+        thread => { return thread.getCommentList().length === 0; });
 
     if (blockLine.threads.length === 0) {
       this.saveAsClosed(blockLine.lineNumber, blockIndex, openThreadsMap);
@@ -44,11 +42,8 @@ export class CommentsService {
 
   // Remove thread by thread index
   closeThread(
-    blockLine: BlockLine,
-    threadIndex: number,
-    blockIndex: BlockIndex,
-    openThreadsMap: Dictionary[],
-  ): void {
+      blockLine: BlockLine, threadIndex: number, blockIndex: BlockIndex,
+      openThreadsMap: Dictionary[], ): void {
     blockLine.threads.splice(threadIndex, 1);
 
     if (blockLine.threads.length === 0) {
@@ -58,29 +53,21 @@ export class CommentsService {
 
   // Add to open threads map
   saveAsOpen(
-    lineNumber: number,
-    lineIndex: number,
-    blockIndex: BlockIndex,
-    openThreadsMap: Dictionary[],
-  ): void {
+      lineNumber: number, lineIndex: number, blockIndex: BlockIndex,
+      openThreadsMap: Dictionary[], ): void {
     openThreadsMap[blockIndex][lineNumber] = lineIndex;
   }
 
   // Remove from open threads map
   saveAsClosed(
-    lineNumber: number,
-    blockIndex: BlockIndex,
-    openThreadsMap: Dictionary[],
-  ): void {
+      lineNumber: number, blockIndex: BlockIndex,
+      openThreadsMap: Dictionary[], ): void {
     delete openThreadsMap[blockIndex][lineNumber];
   }
 
   createNewThread(
-    lineNumber: number,
-    comments: Comment[],
-    file: File,
-    branchInfo: BranchInfo,
-  ): Thread {
+      lineNumber: number, comments: Comment[], file: File,
+      branchInfo: BranchInfo, ): Thread {
     const newThread: Thread = new Thread();
     newThread.setLineNumber(lineNumber);
     newThread.setIsDone(false);

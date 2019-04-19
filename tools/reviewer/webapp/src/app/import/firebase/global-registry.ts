@@ -1,8 +1,8 @@
-import { Observable } from 'rxjs';
+import {Observable} from 'rxjs';
 
-import { FirebaseConfig, ReviewerRegistry } from '@/core/proto';
-import { EncodingService } from '@/core/services';
-import { globalRegistryUrl, id } from 'src/environments/global-registry';
+import {FirebaseConfig, ReviewerRegistry} from '@/core/proto';
+import {EncodingService} from '@/core/services';
+import {globalRegistryUrl, id} from 'src/environments/global-registry';
 
 export class GlobalRegistry {
   static getConfig(): Observable<FirebaseConfig> {
@@ -13,13 +13,15 @@ export class GlobalRegistry {
 
         // Convert binary to ReviewerRegistry
         const encodingService = new EncodingService();
-        const binary: Uint8Array = encodingService.decodeBase64StringToUint8Array(protoText);
-        const reviewerRegistry: ReviewerRegistry = ReviewerRegistry.deserializeBinary(binary);
+        const binary: Uint8Array =
+            encodingService.decodeBase64StringToUint8Array(protoText);
+        const reviewerRegistry: ReviewerRegistry =
+            ReviewerRegistry.deserializeBinary(binary);
 
         // Find reviewer config with current id
-        const reviewerIdConfigList = reviewerRegistry.getReviewerConfigList().filter(
-          reviewerConfig => reviewerConfig.getId() === id,
-        );
+        const reviewerIdConfigList =
+            reviewerRegistry.getReviewerConfigList().filter(
+                reviewerConfig => reviewerConfig.getId() === id, );
         if (reviewerIdConfigList.length < 1) {
           throw new Error(`Project with id "${id}" not found`);
         }

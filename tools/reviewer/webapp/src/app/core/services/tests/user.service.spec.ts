@@ -1,11 +1,9 @@
-import { Reviewer, File, Diff } from '@/core/proto';
-import { UserService } from '../user.service';
+import {Reviewer, File, Diff} from '@/core/proto';
+import {UserService} from '../user.service';
 
 describe('UserService', () => {
   let userService: UserService;
-  beforeEach(() => {
-    userService = new UserService();
-  });
+  beforeEach(() => { userService = new UserService(); });
 
   it('should gets username', () => {
     let email: string;

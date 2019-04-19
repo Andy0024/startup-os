@@ -4,9 +4,9 @@ export * from './diff-threads';
 export * from './discussion.service';
 
 // Components
-import { CodeThreadsComponent } from './code-threads';
-import { DiffDiscussionComponent } from './diff-discussion.component';
-import { DiffThreadsComponent } from './diff-threads';
+import {CodeThreadsComponent} from './code-threads';
+import {DiffDiscussionComponent} from './diff-discussion.component';
+import {DiffThreadsComponent} from './diff-threads';
 export const DiffDiscussionComponentList = [
   DiffDiscussionComponent,
   CodeThreadsComponent,
@@ -14,7 +14,7 @@ export const DiffDiscussionComponentList = [
 ];
 
 // Services
-import { ThreadStateService } from './thread-state.service';
+import {ThreadStateService} from './thread-state.service';
 export const DiffDiscussionServiceList = [
   ThreadStateService,
 ];

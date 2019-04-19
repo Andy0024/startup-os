@@ -8,10 +8,14 @@ import {
   Output,
   SimpleChanges,
 } from '@angular/core';
-import { randstr64 } from 'rndmjs';
+import {randstr64} from 'rndmjs';
 
-import { BranchInfo, Comment, Diff, File, TextDiff, Thread } from '@/core/proto';
-import { DiffUpdateService, NotificationService, UserService } from '@/core/services';
+import {BranchInfo, Comment, Diff, File, TextDiff, Thread} from '@/core/proto';
+import {
+  DiffUpdateService,
+  NotificationService,
+  UserService
+} from '@/core/services';
 import {
   BlockIndex,
   BlockLine,
@@ -52,7 +56,8 @@ const expandAmount: number = 5;
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CodeChangesComponent implements OnInit, OnChanges {
+export class CodeChangesComponent implements OnInit,
+    OnChanges {
   isComponentInit: boolean = false;
   // Lines divided to groups
   codeGroups: CodeGroup[] = [];
@@ -74,16 +79,13 @@ export class CodeChangesComponent implements OnInit, OnChanges {
   @Output() sectionsEmitter = new EventEmitter<Section[]>();
 
   constructor(
-    private userService: UserService,
-    private changesService: ChangesService,
-    public commentsService: CommentsService,
-    public templateService: TemplateService,
-    private notificationService: NotificationService,
-    private diffUpdateService: DiffUpdateService,
-    private lineService: LineService,
-    private blocksService: BlocksService,
-    private sectionService: SectionService,
-  ) { }
+      private userService: UserService, private changesService: ChangesService,
+      public commentsService: CommentsService,
+      public templateService: TemplateService,
+      private notificationService: NotificationService,
+      private diffUpdateService: DiffUpdateService,
+      private lineService: LineService, private blocksService: BlocksService,
+      private sectionService: SectionService, ) {}
 
   ngOnInit() {
     this.openThreadsMap = this.lineService.createSplitDictionary();
@@ -102,22 +104,16 @@ export class CodeChangesComponent implements OnInit, OnChanges {
   // Initializes code lines
   initLines(): void {
     // Create BlockLines
-    const language: string = this.templateService.getLanguage(this.rightFile.getFilename());
+    const language: string =
+        this.templateService.getLanguage(this.rightFile.getFilename());
     const leftBlockLines: BlockLine[] = this.blocksService.getBlockLines(
-      this.textDiff.getLeftFileContents(),
-      language,
-    );
+        this.textDiff.getLeftFileContents(), language, );
     const rightBlockLines: BlockLine[] = this.blocksService.getBlockLines(
-      this.textDiff.getRightFileContents(),
-      language,
-    );
+        this.textDiff.getRightFileContents(), language, );
 
     // Add TextDiff to BlockLines
     this.changesService.applyTextDiffBlockLines(
-      leftBlockLines,
-      rightBlockLines,
-      this.textDiff,
-    );
+        leftBlockLines, rightBlockLines, this.textDiff, );
 
     this.amountOfLines = rightBlockLines.length;
 
@@ -126,9 +122,7 @@ export class CodeChangesComponent implements OnInit, OnChanges {
       if (!this.sections) {
         // Find changes in code and create groups around it
         this.sections = this.sectionService.getSections(
-          this.textDiff.getRightDiffLineList(),
-          this.amountOfLines,
-        );
+            this.textDiff.getRightDiffLineList(), this.amountOfLines, );
       }
     } else {
       // If whole file is opened, we have only 1 group
@@ -142,14 +136,11 @@ export class CodeChangesComponent implements OnInit, OnChanges {
     this.codeGroups = [];
     for (const section of this.sections) {
       const {
-        changesLines,
-        changesLinesMap,
-      } = this.blocksService.synchronizeBlockLines(
-        leftBlockLines,
-        rightBlockLines,
-        section.startLineNumber,
-        section.endLineNumber,
-      );
+          changesLines, changesLinesMap,
+      } =
+          this.blocksService.synchronizeBlockLines(
+              leftBlockLines, rightBlockLines, section.startLineNumber,
+              section.endLineNumber, );
 
       this.codeGroups.push({
         changes: changesLines,
@@ -161,14 +152,16 @@ export class CodeChangesComponent implements OnInit, OnChanges {
   }
 
   expandUp(groupIndex: number): void {
-    let lineNumber: number = this.sections[groupIndex].startLineNumber - expandAmount;
+    let lineNumber: number =
+        this.sections[groupIndex].startLineNumber - expandAmount;
     lineNumber = Math.max(lineNumber, 0);
     this.sections[groupIndex].startLineNumber = lineNumber;
     this.refreshSections();
   }
 
   expandDown(groupIndex: number): void {
-    let lineNumber: number = this.sections[groupIndex].endLineNumber + expandAmount;
+    let lineNumber: number =
+        this.sections[groupIndex].endLineNumber + expandAmount;
     lineNumber = Math.min(lineNumber, this.amountOfLines);
     this.sections[groupIndex].endLineNumber = lineNumber;
     this.refreshSections();
@@ -192,11 +185,13 @@ export class CodeChangesComponent implements OnInit, OnChanges {
     // Close open threads
     this.openThreadsMap.forEach((lineIndexMap, blockIndex) => {
       for (const lineNumber in lineIndexMap) {
-        const groupIndex: number = this.sectionService.getGroupIndex(+lineNumber, this.sections);
+        const groupIndex: number =
+            this.sectionService.getGroupIndex(+lineNumber, this.sections);
         const lineIndex: number = lineIndexMap[lineNumber];
         const changesLines: ChangesLine[] = this.codeGroups[groupIndex].changes;
         const changesLine: ChangesLine = changesLines[lineIndex].commentsLine;
-        this.commentsService.closeThreads(changesLine, blockIndex, this.openThreadsMap);
+        this.commentsService.closeThreads(
+            changesLine, blockIndex, this.openThreadsMap);
       }
     });
 
@@ -207,9 +202,7 @@ export class CodeChangesComponent implements OnInit, OnChanges {
   // Adds the thread to all threads to displays it on user screen
   startThread(thread: Thread): void {
     const groupIndex: number = this.sectionService.getGroupIndex(
-      thread.getLineNumber(),
-      this.sections,
-    );
+        thread.getLineNumber(), this.sections, );
     if (groupIndex === undefined) {
       // Thread is located out of view
       return;
@@ -218,7 +211,8 @@ export class CodeChangesComponent implements OnInit, OnChanges {
     const changesLinesMap: Dictionary[] = this.codeGroups[groupIndex].map;
 
     const blockIndex: BlockIndex = this.getBlockIndex(thread);
-    const lineIndex: number = changesLinesMap[blockIndex][thread.getLineNumber()];
+    const lineIndex: number =
+        changesLinesMap[blockIndex][thread.getLineNumber()];
     if (lineIndex === undefined) {
       // Thread is located out of view
       return;
@@ -226,28 +220,17 @@ export class CodeChangesComponent implements OnInit, OnChanges {
 
     // Add the thread to all threads
     this.commentsService.addThread(
-      changesLines[lineIndex],
-      blockIndex,
-      thread,
-    );
+        changesLines[lineIndex], blockIndex, thread, );
 
     // Save thread to threads map for fast access
     this.commentsService.saveAsOpen(
-      thread.getLineNumber(),
-      lineIndex,
-      blockIndex,
-      this.openThreadsMap,
-    );
+        thread.getLineNumber(), lineIndex, blockIndex, this.openThreadsMap, );
   }
 
   // Creates new thread and sends it to firebase
   addThread(
-    value: string,
-    blockLine: BlockLine,
-    blockIndex: number,
-    lineIndex: number,
-    thread: Thread,
-  ): void {
+      value: string, blockLine: BlockLine, blockIndex: number,
+      lineIndex: number, thread: Thread, ): void {
     if (!value) {
       // Blank comments are not allowed.
       return;
@@ -262,40 +245,28 @@ export class CodeChangesComponent implements OnInit, OnChanges {
 
     // Add comment and send to firebase
     try {
-      this.addComment(
-        blockLine.lineNumber,
-        comment,
-        thread,
-        blockIndex,
-      );
+      this.addComment(blockLine.lineNumber, comment, thread, blockIndex, );
     } catch (e) {
       // No need to reset state, if comment wasn't added
       return;
     }
 
     this.commentsService.saveAsOpen(
-      blockLine.lineNumber,
-      lineIndex,
-      blockIndex,
-      this.openThreadsMap,
-    );
+        blockLine.lineNumber, lineIndex, blockIndex, this.openThreadsMap, );
   }
 
   // Send diff with new comment to firebase
   private addComment(
-    lineNumber: number,
-    comment: Comment,
-    thread: Thread,
-    blockIndex: BlockIndex,
-  ): void {
+      lineNumber: number, comment: Comment, thread: Thread,
+      blockIndex: BlockIndex, ): void {
     if (!this.getFileByBlockIndex(blockIndex)) {
       // TODO: Add more UX behavior here
       // For example:
       // Remove button 'add comment' if it's an uncommitted file.
       // Or open uncommitted files in a special readonly mode.
       // etc
-      this.notificationService
-        .error('Comment cannot be added to an uncommitted file');
+      this.notificationService.error(
+          'Comment cannot be added to an uncommitted file');
 
       throw new Error('Comment cannot be added to an uncommitted file');
     }
@@ -304,11 +275,8 @@ export class CodeChangesComponent implements OnInit, OnChanges {
     if (thread.getCommentList().length === 1) {
       // Create new thread
       const newThread: Thread = this.commentsService.createNewThread(
-        lineNumber,
-        thread.getCommentList(),
-        this.getFileByBlockIndex(blockIndex),
-        this.branchInfo,
-      );
+          lineNumber, thread.getCommentList(),
+          this.getFileByBlockIndex(blockIndex), this.branchInfo, );
       this.diff.addCodeThread(newThread);
     }
 
@@ -321,8 +289,9 @@ export class CodeChangesComponent implements OnInit, OnChanges {
 
   // Get block index (0 or 1) depends on commit id
   private getBlockIndex(thread: Thread): number {
-    for (const blockIndex of [BlockIndex.leftFile, BlockIndex.rightFile]) {
-      const commitId: string = this.getFileByBlockIndex(blockIndex).getCommitId();
+    for (const blockIndex of[BlockIndex.leftFile, BlockIndex.rightFile]) {
+      const commitId: string =
+          this.getFileByBlockIndex(blockIndex).getCommitId();
       if (commitId === thread.getCommitId()) {
         return blockIndex;
       }

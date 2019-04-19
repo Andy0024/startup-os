@@ -1,4 +1,4 @@
-import { DiffLine, Thread } from '@/core/proto';
+import {DiffLine, Thread} from '@/core/proto';
 
 export enum BlockIndex {
   leftFile,
@@ -28,9 +28,7 @@ export interface ChangesLine {
   commentsLine: ChangesLine;
 }
 
-export interface Dictionary {
-  [id: number]: number;
-}
+export interface Dictionary { [id: number]: number; }
 
 export interface CodeGroup {
   changes: ChangesLine[];

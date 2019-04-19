@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 
-import { DiffLine } from '@/core/proto';
+import {DiffLine} from '@/core/proto';
 import {
   BlockIndex,
   BlockLine,
@@ -30,11 +30,8 @@ export class LineService {
     return placeholder;
   }
 
-  createBlockLine(
-    code: string,
-    clearCode: string,
-    lineNumber: number,
-  ): BlockLine {
+  createBlockLine(code: string, clearCode: string, lineNumber: number, ):
+      BlockLine {
     const blockLine: BlockLine = this.createEmptyBlockLine();
     blockLine.code = code;
     blockLine.clearCode = clearCode;
@@ -50,33 +47,30 @@ export class LineService {
     };
   }
 
-  createChangesLine(
-    leftBlockLine: BlockLine,
-    rightBlockLine: BlockLine,
-  ): ChangesLine {
+  createChangesLine(leftBlockLine: BlockLine, rightBlockLine: BlockLine, ):
+      ChangesLine {
     const changesLine: ChangesLine = this.createEmptyChangesLine();
     changesLine.blocks = [leftBlockLine, rightBlockLine];
     return changesLine;
   }
 
-  createCommentsLine(
-    leftBlockLine: BlockLine,
-    rightBlockLine: BlockLine,
-  ): ChangesLine {
+  createCommentsLine(leftBlockLine: BlockLine, rightBlockLine: BlockLine, ):
+      ChangesLine {
     const commentsLine: ChangesLine = this.createEmptyChangesLine();
     commentsLine.isCommentsLine = true;
     commentsLine.commentsLine = commentsLine;
-    commentsLine.blocks[BlockIndex.leftFile].lineNumber = leftBlockLine
-      .lineNumber;
-    commentsLine.blocks[BlockIndex.rightFile].lineNumber = rightBlockLine
-      .lineNumber;
+    commentsLine.blocks[BlockIndex.leftFile].lineNumber =
+        leftBlockLine.lineNumber;
+    commentsLine.blocks[BlockIndex.rightFile].lineNumber =
+        rightBlockLine.lineNumber;
     return commentsLine;
   }
 
   // Split dictionary is a matrix, where
   // first key is index of block (left or right)
   // second key is line number of block.
-  // By the second key you can get fast access to lineIndex (line number of code changes)
+  // By the second key you can get fast access to lineIndex (line number of code
+  // changes)
   createSplitDictionary(): Dictionary[] {
     const splitDictionary: Dictionary[] = [];
     splitDictionary[BlockIndex.leftFile] = {};

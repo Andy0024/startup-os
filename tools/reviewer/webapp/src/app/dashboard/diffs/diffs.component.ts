@@ -1,9 +1,13 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Router} from '@angular/router';
+import {Subscription} from 'rxjs';
 
-import { Diff, Reviewer } from '@/core/proto';
-import { FirebaseStateService, SelectDashboardService, UserService } from '@/core/services';
+import {Diff, Reviewer} from '@/core/proto';
+import {
+  FirebaseStateService,
+  SelectDashboardService,
+  UserService
+} from '@/core/services';
 
 export enum DiffGroups {
   NeedAttention,
@@ -20,7 +24,8 @@ export enum DiffGroups {
   templateUrl: './diffs.component.html',
   styleUrls: ['./diffs.component.scss'],
 })
-export class DiffsComponent implements OnInit, OnDestroy {
+export class DiffsComponent implements OnInit,
+    OnDestroy {
   isLoading: boolean = true;
   diffGroups: Diff[][] = [];
   diffGroupNameList: string[] = [];
@@ -29,11 +34,9 @@ export class DiffsComponent implements OnInit, OnDestroy {
   dashboardSubscription = new Subscription();
 
   constructor(
-    private firebaseStateService: FirebaseStateService,
-    private userService: UserService,
-    private router: Router,
-    private selectDashboardService: SelectDashboardService,
-  ) {
+      private firebaseStateService: FirebaseStateService,
+      private userService: UserService, private router: Router,
+      private selectDashboardService: SelectDashboardService, ) {
     this.diffGroupNameList[DiffGroups.NeedAttention] = 'Need Attention';
     this.diffGroupNameList[DiffGroups.Incoming] = 'Incoming Diffs';
     this.diffGroupNameList[DiffGroups.Outgoing] = 'Outgoing Diffs';
@@ -43,15 +46,14 @@ export class DiffsComponent implements OnInit, OnDestroy {
     this.diffGroupNameList[DiffGroups.Submitted] = 'Submitted Diffs';
 
     // When dashboard is changed or opened first time
-    this.dashboardSubscription = this.selectDashboardService.dashboardChanges.subscribe(email => {
-      this.loadDiffs(email);
-    });
+    this.dashboardSubscription =
+        this.selectDashboardService.dashboardChanges.subscribe(
+            email => { this.loadDiffs(email); });
   }
 
   ngOnInit() {
-    const urlEmail: string = this.router
-      .parseUrl(this.router.url)
-      .queryParams['email'];
+    const urlEmail: string =
+        this.router.parseUrl(this.router.url).queryParams['email'];
 
     if (urlEmail) {
       // Show the page from a view of the user from url.
@@ -64,19 +66,19 @@ export class DiffsComponent implements OnInit, OnDestroy {
 
   // Loads diffs from firebase
   loadDiffs(userEmail: string): void {
-    this.onloadSubscription = this.firebaseStateService.getDiffs().subscribe(diffs => {
-      this.categorizeDiffs(userEmail, diffs);
-      this.subscribeOnChanges(userEmail);
-    });
+    this.onloadSubscription =
+        this.firebaseStateService.getDiffs().subscribe(diffs => {
+          this.categorizeDiffs(userEmail, diffs);
+          this.subscribeOnChanges(userEmail);
+        });
   }
 
   // Each time when a diff is added/changed/deleted in firebase,
   // we receive new list here.
   subscribeOnChanges(userEmail: string): void {
     this.changesSubscription.unsubscribe();
-    this.changesSubscription = this.firebaseStateService.diffsChanges.subscribe(diffs => {
-      this.categorizeDiffs(userEmail, diffs);
-    });
+    this.changesSubscription = this.firebaseStateService.diffsChanges.subscribe(
+        diffs => { this.categorizeDiffs(userEmail, diffs); });
   }
 
   // Categorize diffs in specific groups

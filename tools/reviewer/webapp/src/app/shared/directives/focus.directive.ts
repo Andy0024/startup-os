@@ -12,7 +12,7 @@ import {
 export class FocusDirective implements OnInit {
   @Input('focus') isFocused: boolean;
 
-  constructor(private hostElement: ElementRef) { }
+  constructor(private hostElement: ElementRef) {}
 
   ngOnInit() {
     if (this.isFocused) {

@@ -1,7 +1,7 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 
-import { ChangeType, DiffLine } from '@/core/proto';
-import { Section } from '../code-changes.interface';
+import {ChangeType, DiffLine} from '@/core/proto';
+import {Section} from '../code-changes.interface';
 
 export const linesAroundChange: number = 5;
 
@@ -11,7 +11,8 @@ export class SectionService {
   // Finds changes in diffLines and creates code groups around it.
   // How it's impelented:
   // Finds a change, remembers its line number.
-  // Moves to next change until it's located more than 10 lines from previos one,
+  // Moves to next change until it's located more than 10 lines from previos
+  // one,
   // or it's end of the file.
   // Remembers line number of the change too.
   // Adds section with the two line numbers.
@@ -22,19 +23,18 @@ export class SectionService {
     let sectionArray: number[] = [];
 
     // Leave only diffLines with changes
-    const changeDiffLines: DiffLine[] = diffLines.filter(diffLine => (
-      diffLine.getType() === ChangeType.DELETE ||
-      diffLine.getType() === ChangeType.ADD ||
-      diffLine.getType() === ChangeType.LINE_PLACEHOLDER
-    ));
+    const changeDiffLines: DiffLine[] = diffLines.filter(
+        diffLine =>
+            (diffLine.getType() === ChangeType.DELETE ||
+             diffLine.getType() === ChangeType.ADD ||
+             diffLine.getType() === ChangeType.LINE_PLACEHOLDER));
 
     // Adds section if next change not found (end of the file) or
     // next change is located too far away.
     function addSection(lineNumber: number, nextDiffLine: DiffLine): void {
-      if (
-        nextDiffLine === undefined ||
-        nextDiffLine.getDiffLineNumber() - lineNumber > linesAroundChange * 2
-      ) {
+      if (nextDiffLine === undefined ||
+          nextDiffLine.getDiffLineNumber() - lineNumber >
+              linesAroundChange * 2) {
         sectionArray.push(lineNumber + 1);
         const startLineNumber: number = sectionArray[0] - linesAroundChange;
         const endLineNumber: number = sectionArray[1] + linesAroundChange;

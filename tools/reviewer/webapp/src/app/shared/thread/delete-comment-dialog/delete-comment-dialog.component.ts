@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { MatDialogRef } from '@angular/material';
+import {Component} from '@angular/core';
+import {MatDialogRef} from '@angular/material';
 
 @Component({
   selector: 'delete-comment-dialog',
@@ -7,13 +7,9 @@ import { MatDialogRef } from '@angular/material';
   styleUrls: ['./delete-comment-dialog.component.scss'],
 })
 export class DeleteCommentDialogComponent {
-  constructor(private dialogRef: MatDialogRef<DeleteCommentDialogComponent>) { }
+  constructor(private dialogRef: MatDialogRef<DeleteCommentDialogComponent>) {}
 
-  close(): void {
-    this.dialogRef.close(false);
-  }
+  close(): void { this.dialogRef.close(false); }
 
-  delete(): void {
-    this.dialogRef.close(true);
-  }
+  delete (): void { this.dialogRef.close(true); }
 }

@@ -1,11 +1,11 @@
-import { Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
-import { MatDialog } from '@angular/material';
-import { Subscription } from 'rxjs';
+import {Component, EventEmitter, Input, OnDestroy, Output} from '@angular/core';
+import {MatDialog} from '@angular/material';
+import {Subscription} from 'rxjs';
 
-import { Comment, Diff, Thread } from '@/core/proto';
-import { DiffUpdateService, UserService } from '@/core/services';
-import { DeleteCommentDialogComponent } from '../delete-comment-dialog';
-import { CommentExpandedMap } from './thread-comments.interface';
+import {Comment, Diff, Thread} from '@/core/proto';
+import {DiffUpdateService, UserService} from '@/core/services';
+import {DeleteCommentDialogComponent} from '../delete-comment-dialog';
+import {CommentExpandedMap} from './thread-comments.interface';
 
 @Component({
   selector: 'thread-comments',
@@ -25,19 +25,14 @@ export class ThreadCommentsComponent implements OnDestroy {
   @Output() closeEmitter = new EventEmitter<void>();
 
   constructor(
-    private dialog: MatDialog,
-    private userService: UserService,
-    private diffUpdateService: DiffUpdateService,
-  ) { }
+      private dialog: MatDialog, private userService: UserService,
+      private diffUpdateService: DiffUpdateService, ) {}
 
-  ngOnInit() {
-    this.initStateMap();
-  }
+  ngOnInit() { this.initStateMap(); }
 
   initStateMap(): void {
-    this.thread.getCommentList().forEach(() => {
-      this.isCommentEditingMap.push(false);
-    });
+    this.thread.getCommentList().forEach(
+        () => { this.isCommentEditingMap.push(false); });
   }
 
   // Makes a comment maximized by clicking on it. Full text and date.
@@ -47,24 +42,26 @@ export class ThreadCommentsComponent implements OnDestroy {
   }
 
   deleteComment(commentIndex: number): void {
-    this.dialog.open(DeleteCommentDialogComponent, { width: '380px', autoFocus: false })
-      .afterClosed()
-      .subscribe((isDelete: boolean) => {
-        if (isDelete) {
-          // Delete the comment from the thread
-          const comments: Comment[] = this.thread.getCommentList();
-          comments.splice(commentIndex, 1);
-          this.thread.setCommentList(comments);
+    this.dialog
+        .open(DeleteCommentDialogComponent, {width: '380px', autoFocus: false})
+        .afterClosed()
+        .subscribe((isDelete: boolean) => {
+          if (isDelete) {
+            // Delete the comment from the thread
+            const comments: Comment[] = this.thread.getCommentList();
+            comments.splice(commentIndex, 1);
+            this.thread.setCommentList(comments);
 
-          const isDeleteThread: boolean = this.thread.getCommentList().length === 0;
-          if (isDeleteThread) {
-            this.closeEmitter.emit();
+            const isDeleteThread: boolean =
+                this.thread.getCommentList().length === 0;
+            if (isDeleteThread) {
+              this.closeEmitter.emit();
+            }
+
+            // Delete the comment from firebase
+            this.diffUpdateService.deleteComment(this.diff, isDeleteThread);
           }
-
-          // Delete the comment from firebase
-          this.diffUpdateService.deleteComment(this.diff, isDeleteThread);
-        }
-      });
+        });
   }
 
   // Starts editing of a comment
@@ -82,7 +79,8 @@ export class ThreadCommentsComponent implements OnDestroy {
   // When menu is opened/closed
   saveMenuState(isMenuVisible: boolean): void {
     this.isMenuVisible = isMenuVisible;
-    // We need it, because updating of thread can close menu, which we just opened
+    // We need it, because updating of thread can close menu, which we just
+    // opened
     this.checkFreeze();
   }
 
@@ -113,7 +111,5 @@ export class ThreadCommentsComponent implements OnDestroy {
     }
   }
 
-  ngOnDestroy() {
-    this.subscription.unsubscribe();
-  }
+  ngOnDestroy() { this.subscription.unsubscribe(); }
 }

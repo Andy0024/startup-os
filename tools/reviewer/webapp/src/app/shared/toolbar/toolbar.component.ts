@@ -1,7 +1,7 @@
-import { AuthService } from '@/core';
-import { Component } from '@angular/core';
+import {AuthService} from '@/core';
+import {Component} from '@angular/core';
 
-import { SelectDashboardService, UserService } from '@/core/services';
+import {SelectDashboardService, UserService} from '@/core/services';
 
 @Component({
   selector: 'cr-toolbar',
@@ -10,14 +10,10 @@ import { SelectDashboardService, UserService } from '@/core/services';
 })
 export class ToolbarComponent {
   constructor(
-    public authService: AuthService,
-    public userService: UserService,
-    public selectDashboardService: SelectDashboardService,
-  ) { }
+      public authService: AuthService, public userService: UserService,
+      public selectDashboardService: SelectDashboardService, ) {}
 
-  logout(): void {
-    this.authService.logOut().subscribe();
-  }
+  logout(): void { this.authService.logOut().subscribe(); }
 
   home(): void {
     this.selectDashboardService.selectDashboard(this.userService.email);

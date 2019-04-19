@@ -1,6 +1,6 @@
-import { Component, Input, OnChanges, OnInit } from '@angular/core';
+import {Component, Input, OnChanges, OnInit} from '@angular/core';
 
-import { Diff, Reviewer } from '@/core/proto';
+import {Diff, Reviewer} from '@/core/proto';
 import {
   CiService,
   DiffUpdateService,
@@ -16,7 +16,8 @@ import {
   templateUrl: './diff-header-content.component.html',
   styleUrls: ['./diff-header-content.component.scss'],
 })
-export class DiffHeaderContentComponent implements OnChanges, OnInit {
+export class DiffHeaderContentComponent implements OnChanges,
+    OnInit {
   description: string = '';
   isDescriptionEditMode: boolean = false;
   ciStatusList: Status[] = [];
@@ -25,15 +26,12 @@ export class DiffHeaderContentComponent implements OnChanges, OnInit {
   @Input() diff: Diff;
 
   constructor(
-    public userService: UserService,
-    public diffUpdateService: DiffUpdateService,
-    public highlightService: HighlightService,
-    public ciService: CiService,
-  ) { }
+      public userService: UserService,
+      public diffUpdateService: DiffUpdateService,
+      public highlightService: HighlightService,
+      public ciService: CiService, ) {}
 
-  ngOnChanges() {
-    this.description = this.diff.getDescription();
-  }
+  ngOnChanges() { this.description = this.diff.getDescription(); }
 
   ngOnInit() {
     // If CI exists then load status list from localserver
@@ -49,10 +47,7 @@ export class DiffHeaderContentComponent implements OnChanges, OnInit {
 
   changeAttention(email: string): void {
     // Get reviewer
-    const reviewer: Reviewer = this.userService.getReviewer(
-      this.diff,
-      email,
-    );
+    const reviewer: Reviewer = this.userService.getReviewer(this.diff, email, );
     if (!reviewer) {
       throw new Error('Reviewer not found');
     }
@@ -99,7 +94,8 @@ export class DiffHeaderContentComponent implements OnChanges, OnInit {
   }
 
   removeIssue(issueToRemove: string): void {
-    const issues: string[] = this.diff.getIssueList().filter(issue => issue !== issueToRemove);
+    const issues: string[] =
+        this.diff.getIssueList().filter(issue => issue !== issueToRemove);
     this.diff.setIssueList(issues);
     this.diffUpdateService.updateIssueList(this.diff);
   }
@@ -137,9 +133,7 @@ export class DiffHeaderContentComponent implements OnChanges, OnInit {
     this.diffUpdateService.customUpdate(this.diff, username + ' is ' + action);
   }
 
-  startDescriptionEditMode(): void {
-    this.isDescriptionEditMode = true;
-  }
+  startDescriptionEditMode(): void { this.isDescriptionEditMode = true; }
 
   stopDescriptionEditMode(): void {
     this.description = this.diff.getDescription();
@@ -152,11 +146,14 @@ export class DiffHeaderContentComponent implements OnChanges, OnInit {
     // https://stackoverflow.com/a/3809435
 
     // tslint:disable-next-line
-    const urlRegExp: RegExp = /[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/g;
+    const urlRegExp: RegExp =
+        /[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/g;
 
-    // We need to escape special html chars, but a url contains some of the special chars.
+    // We need to escape special html chars, but a url contains some of the
+    // special chars.
     // So we need to highlight urls and escape special chars separately.
-    // Implementation: find a url, highlight it, make all text before the url escaped,
+    // Implementation: find a url, highlight it, make all text before the url
+    // escaped,
     // go to the next url.
     let parsedDescription: string = '';
     let clippedDescription: string = this.description;
@@ -169,16 +166,16 @@ export class DiffHeaderContentComponent implements OnChanges, OnInit {
         // All text before the url
         const commonText: string = clippedDescription.substr(0, linkIndex);
         parsedDescription +=
-          this.highlightService.htmlSpecialChars(commonText) + // Escape html
-          url.link(url); // Hightlight the url
+            this.highlightService.htmlSpecialChars(commonText) +  // Escape html
+            url.link(url);  // Hightlight the url
         // Cut the part, which we already parsed
         clippedDescription = clippedDescription.substr(
-          linkIndex + url.length,
-          clippedDescription.length - (linkIndex + url.length),
-        );
+            linkIndex + url.length,
+            clippedDescription.length - (linkIndex + url.length), );
       }
       // Don't forget about text after last found url
-      parsedDescription += this.highlightService.htmlSpecialChars(clippedDescription);
+      parsedDescription +=
+          this.highlightService.htmlSpecialChars(clippedDescription);
 
       return parsedDescription;
     } else {

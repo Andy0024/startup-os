@@ -1,4 +1,4 @@
-import { Diff } from '@/core/proto';
+import {Diff} from '@/core/proto';
 
 export interface Status {
   label: string;

@@ -1,8 +1,8 @@
-import { Component, Inject } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
+import {Component, Inject} from '@angular/core';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
 
-import { Diff } from '@/core/proto';
-import { NotificationService } from '@/core/services';
+import {Diff} from '@/core/proto';
+import {NotificationService} from '@/core/services';
 
 export interface DeleteDiffReturn {
   isDeleteDiff: boolean;
@@ -20,10 +20,9 @@ export class DeleteDiffDialogComponent {
   isError: boolean = false;
 
   constructor(
-    private dialogRef: MatDialogRef<DeleteDiffDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) private diff: Diff,
-    private notificationService: NotificationService,
-  ) { }
+      private dialogRef: MatDialogRef<DeleteDiffDialogComponent>,
+      @Inject(MAT_DIALOG_DATA) private diff: Diff,
+      private notificationService: NotificationService, ) {}
 
   close(): void {
     this.exit({
@@ -32,7 +31,7 @@ export class DeleteDiffDialogComponent {
     });
   }
 
-  delete(): void {
+  delete (): void {
     if (this.diffId === this.diff.getId()) {
       // Entered diff id is correct. Close the dialog
       this.exit({
@@ -42,7 +41,8 @@ export class DeleteDiffDialogComponent {
     } else {
       this.isError = true;
       if (!this.diffId) {
-        this.notificationService.error('You must enter diff id to delete the diff');
+        this.notificationService.error(
+            'You must enter diff id to delete the diff');
       } else {
         this.notificationService.error('Diff id is incorrect');
       }
@@ -55,7 +55,5 @@ export class DeleteDiffDialogComponent {
   }
 
   // When user focuses input
-  onFocus(): void {
-    this.isError = false;
-  }
+  onFocus(): void { this.isError = false; }
 }

@@ -1,7 +1,7 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 
-import { WordChange } from '@/core/proto';
-import { HighlightService } from '@/core/services';
+import {WordChange} from '@/core/proto';
+import {HighlightService} from '@/core/services';
 import {
   BlockIndex,
   BlockLine,
@@ -12,22 +12,22 @@ import {
 // So most complicated code is located here and is called by template.
 @Injectable()
 export class TemplateService {
-  constructor(private highlightService: HighlightService) { }
+  constructor(private highlightService: HighlightService) {}
 
   // Get class for a line, based on its parameters
   getLineBackground(
-    changesLine: ChangesLine,
-    blockIndex: BlockIndex,
-    blockLine: BlockLine,
-  ): string {
+      changesLine: ChangesLine, blockIndex: BlockIndex,
+      blockLine: BlockLine, ): string {
     if (changesLine.isCommentsLine) {
       return 'comments';
     } else if (blockLine.isPlaceholder) {
       return 'placeholder';
     } else if (blockLine.isChanged) {
       switch (blockIndex) {
-        case BlockIndex.leftFile: return 'left-file';
-        case BlockIndex.rightFile: return 'right-file';
+        case BlockIndex.leftFile:
+          return 'left-file';
+        case BlockIndex.rightFile:
+          return 'right-file';
         default:
           throw new Error('Invalid block index');
       }
@@ -40,23 +40,16 @@ export class TemplateService {
   highlightChanges(blockLine: BlockLine, blockIndex: BlockIndex): void {
     const wordChanges: WordChange[] = blockLine.diffLine.getWordChangeList();
 
-    const className = (blockIndex === BlockIndex.rightFile) ?
-      'hl-right' :
-      'hl-left';
+    const className =
+        (blockIndex === BlockIndex.rightFile) ? 'hl-right' : 'hl-left';
 
     // If word changes exist and it's not whole line, then show it
-    if (
-      wordChanges.length > 1 ||
-      wordChanges.length > 0 && (
-        wordChanges[0].getStartIndex() !== 0 ||
-        wordChanges[0].getEndIndex() !== blockLine.clearCode.length
-      )
-    ) {
-      blockLine.wordChanges = this.makeHighlighting(
-        wordChanges,
-        blockLine.clearCode,
-        className,
-      );
+    if (wordChanges.length > 1 ||
+        wordChanges.length > 0 &&
+            (wordChanges[0].getStartIndex() !== 0 ||
+             wordChanges[0].getEndIndex() !== blockLine.clearCode.length)) {
+      blockLine.wordChanges =
+          this.makeHighlighting(wordChanges, blockLine.clearCode, className, );
     }
   }
 
@@ -65,10 +58,7 @@ export class TemplateService {
   // 'I think x > y here' -> 'I <span>think</span> x &gt; y here'
   // word 'think' is highlighted part
   private makeHighlighting(
-    wordChanges: WordChange[],
-    code: string,
-    className: string,
-  ): string {
+      wordChanges: WordChange[], code: string, className: string, ): string {
     let highlighting: string = '';
     let previousEndIndex: number = 0;
 
@@ -76,21 +66,20 @@ export class TemplateService {
     wordChanges.forEach(wordChange => {
       // Cut code by indexes
       let codeBeforeWordChange: string = code.substr(
-        previousEndIndex,
-        wordChange.getStartIndex() - previousEndIndex,
-      );
+          previousEndIndex, wordChange.getStartIndex() - previousEndIndex, );
       let codeWithWordChange: string = code.substr(
-        wordChange.getStartIndex(),
-        wordChange.getEndIndex() - wordChange.getStartIndex(),
-      );
+          wordChange.getStartIndex(),
+          wordChange.getEndIndex() - wordChange.getStartIndex(), );
 
       // Escape html special chars
-      codeBeforeWordChange = this.highlightService.htmlSpecialChars(codeBeforeWordChange);
-      codeWithWordChange = this.highlightService.htmlSpecialChars(codeWithWordChange);
+      codeBeforeWordChange =
+          this.highlightService.htmlSpecialChars(codeBeforeWordChange);
+      codeWithWordChange =
+          this.highlightService.htmlSpecialChars(codeWithWordChange);
 
       // Highlight changed part
       const span: HTMLSpanElement = document.createElement('span');
-      span.className = className; // Apply color. Red or green.
+      span.className = className;  // Apply color. Red or green.
       span.innerHTML = codeWithWordChange;
       codeWithWordChange = span.outerHTML;
 
@@ -101,13 +90,12 @@ export class TemplateService {
     // Add code after all word changes
     if (previousEndIndex !== code.length) {
       // Cut code by indexes
-      let codeAfterAllChanges: string = code.substr(
-        previousEndIndex,
-        code.length - previousEndIndex,
-      );
+      let codeAfterAllChanges: string =
+          code.substr(previousEndIndex, code.length - previousEndIndex, );
 
       // Escape html special chars
-      codeAfterAllChanges = this.highlightService.htmlSpecialChars(codeAfterAllChanges);
+      codeAfterAllChanges =
+          this.highlightService.htmlSpecialChars(codeAfterAllChanges);
 
       highlighting += codeAfterAllChanges;
     }
@@ -127,20 +115,33 @@ export class TemplateService {
     const extension: string = extensionRegExp.exec(filename)[1];
 
     switch (extension) {
-      case 'js': return 'javascript';
-      case 'ts': return 'typescript';
-      case 'java': return 'java';
-      case 'proto': return 'protobuf';
-      case 'md': return 'markdown';
-      case 'json': return 'json';
-      case 'css': return 'css';
-      case 'scss': return 'scss';
-      case 'html': return 'html';
-      case 'sh': return 'bash';
-      case 'xml': return 'xml';
-      case 'py': return 'python';
+      case 'js':
+        return 'javascript';
+      case 'ts':
+        return 'typescript';
+      case 'java':
+        return 'java';
+      case 'proto':
+        return 'protobuf';
+      case 'md':
+        return 'markdown';
+      case 'json':
+        return 'json';
+      case 'css':
+        return 'css';
+      case 'scss':
+        return 'scss';
+      case 'html':
+        return 'html';
+      case 'sh':
+        return 'bash';
+      case 'xml':
+        return 'xml';
+      case 'py':
+        return 'python';
 
-      default: return 'clean';
+      default:
+        return 'clean';
     }
 
     // All supported languages:

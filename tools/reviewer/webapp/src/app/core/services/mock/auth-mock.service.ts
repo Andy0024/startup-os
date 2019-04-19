@@ -1,17 +1,13 @@
-import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import {Injectable} from '@angular/core';
+import {Observable, of} from 'rxjs';
 
 @Injectable()
 export class AuthMockService {
   isOnline: boolean;
 
-  constructor() {
-    this.isOnline = true;
-  }
+  constructor() { this.isOnline = true; }
 
-  getUsername(userEmail: string): string {
-    return 'testuser';
-  }
+  getUsername(userEmail: string): string { return 'testuser'; }
 
   logInWithGoogle(): Observable<void> {
     this.isOnline = true;

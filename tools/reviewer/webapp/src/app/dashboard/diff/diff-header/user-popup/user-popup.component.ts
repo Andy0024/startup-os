@@ -36,9 +36,7 @@ export class UserPopupComponent {
     this.close();
   }
 
-  close(): void {
-    this.isHovered = false;
-  }
+  close(): void { this.isHovered = false; }
 
   changeAttention(): void {
     this.changeAttentionEmitter.emit(this.email);

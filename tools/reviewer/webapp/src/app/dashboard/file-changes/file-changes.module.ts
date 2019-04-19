@@ -1,10 +1,10 @@
-import { NgModule } from '@angular/core';
+import {NgModule} from '@angular/core';
 
-import { SharedModule } from '@/shared';
+import {SharedModule} from '@/shared';
 
-import { CommitMenuComponentList } from './commit-menu';
-import { FileChangesRoutingModule } from './file-changes-routing.module';
-import { FileChangesComponent } from './file-changes.component';
+import {CommitMenuComponentList} from './commit-menu';
+import {FileChangesRoutingModule} from './file-changes-routing.module';
+import {FileChangesComponent} from './file-changes.component';
 
 @NgModule({
   imports: [
@@ -16,7 +16,8 @@ import { FileChangesComponent } from './file-changes.component';
     ...CommitMenuComponentList,
   ],
 })
-export class FileChangesModule { }
+export class FileChangesModule {
+}
 export function FileChangesModuleFactory() {
   return FileChangesModule;
 }
